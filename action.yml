@@ -32,22 +32,24 @@ runs:
     - name: Sonar Analysis configuration INFO
       shell: bash
       run: |
+        echo ""
+        echo "==================================================================================================================="
         echo "⚠️ HOW TO CONFIGURE SONAR CLOUD? 👇🏼"
         echo "The following configuration is required to enable SonarCloud analysis:"
-        echo "1. Go to https://sonarcloud.io/ and create an account."
-        echo "2. Create a new project and generate a token."
+        echo "1️⃣. Go to https://sonarcloud.io/ and create an account."
+        echo "2️⃣. Create a new project and generate a token."
         echo "To generate a token, go to your SonarCloud account > Security > Generate token."
-        echo "3. Go to your repository settings > Secrets > New repository secret and add the token as 'SONAR_TOKEN'."
-        echo "4. Create a sonar-project.properties file in the root of your project with the following content:"
+        echo "3️⃣. Go to your repository settings > Secrets > New repository secret and add the token as 'SONAR_TOKEN'."
+        echo "4️⃣. Create a sonar-project.properties file in the root of your project with the following content:"
         echo "* sonar.organization"
         echo "* sonar.projectKey"
         echo "* sonar.sources"
         echo "* sonar.sourceEncoding"
         echo "Your sonar organization and projectkey can be found in your SonarCloud account in the project settings."
-        echo "Note: make sure to disable automatic analysis in SonarCloud."
-        echo "Note: You can customize the analysis by adding more properties to the sonar-project.properties file."
-        echo "Further information can be found in: https://docs.sonarsource.com/sonarcloud/?_gl=1*9c6cks*_gcl_au*MjE0MDA2MjkyOS4xNzI1Nzg1MjM4*_ga*NjQxNjQ4MDYuMTcyNTc4NTIzNg..*_ga_9JZ0GZ5TC6*MTcyNTc4NTIzNi4xLjEuMTcyNTc4OTYyMS42MC4wLjA"
-
+        echo "📋 Note: make sure to disable automatic analysis in SonarCloud."
+        echo "📋 Note: You can customize the analysis by adding more properties to the sonar-project.properties file."
+        echo "⏩️ Further information can be found in: https://docs.sonarsource.com/sonarcloud/?_gl=1*9c6cks*_gcl_au*MjE0MDA2MjkyOS4xNzI1Nzg1MjM4*_ga*NjQxNjQ4MDYuMTcyNTc4NTIzNg..*_ga_9JZ0GZ5TC6*MTcyNTc4NTIzNi4xLjEuMTcyNTc4OTYyMS42MC4wLjA"
+        echo "==================================================================================================================="
 
     - name: Check sonar-token
       if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
