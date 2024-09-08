@@ -1,0 +1,70 @@
+name: 'GAWG Quality action'
+description: 'This action is used to analyze the quality of the code using SonarCloud.'
+author: Álvaro García Pizarro
+branding:
+  icon: 'lock'
+  color: 'gray-dark'
+
+inputs:
+  config-json:
+    type: string
+    description: 'JSON string containing workflow config parameters.'
+    required: true
+  github-token:
+    type: string
+    description: 'GitHub token for authentication.'
+    required: true
+  sonar-token:
+    type: string
+    description: 'SonarCloud token for authentication.'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Skip SonarCloud Scan
+      if: ${{ fromJson(inputs.config-json).SONAR == 'disabled' }}
+      run: |
+        echo "SonarCloud Scan is disabled. To enable it, set the SONAR variable to 'enabled' in the workflow_config.yml file."
+        echo "SonarCloud Scan is disabled. To enable it, set the SONAR variable to 'enabled' in the workflow_config.yml file." >> $GITHUB_STEP_SUMMARY
+
+    - name: Sonar Analysis configuration INFO
+      run: |
+        echo "test"
+
+    - name: Check sonar-token, sonar_organization, sonar_projectbasedir & sonar_projectkey
+      if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
+      run: |
+        if [ -z "${{ inputs.sonar-token }}" ]; then
+          echo "❌ Error: SONAR-TOKEN is not set. To set it, go to your repository settings > Secrets > New repository secret and add it as 'SONAR-TOKEN'."
+          echo "❌ Error: SONAR-TOKEN is not set. To set it, go to your repository settings > Secrets > New repository secret and add it as 'SONAR-TOKEN'." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+        if [ -z "${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}" ]; then
+          echo "❌ Error: SONAR-ORGANIZATION is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_ORGANIZATION'."
+          echo "❌ Error: SONAR-ORGANIZATION is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_ORGANIZATION'." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+        if [ -z "${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}" ]; then
+          echo "❌ Error: SONAR-PROJECTKEY is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTKEY'."
+          echo "❌ Error: SONAR-PROJECTKEY is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTKEY'." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+        if [ -z "${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}" ]; then
+          echo "❌ Error: SONAR-PROJECTBASEDIR is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTBASEDIR'."
+          echo "❌ Error: SONAR-PROJECTBASEDIR is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTBASEDIR'." >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+
+    - name: SonarCloud Scan
+      if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        SONAR_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.sonar-token }}
+      with:
+        projectBaseDir: ${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}
+        args: >
+          -Dsonar.organization=${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}
+          -Dsonar.projectKey=${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}
+          ${{ fromJson(inputs.config-json).SONAR_EXTRA_ARGS }}
