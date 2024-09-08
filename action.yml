@@ -32,12 +32,14 @@ runs:
     - name: Sonar Analysis configuration INFO
       shell: bash
       run: |
-        echo "test"
+        echo "⚠️ HOW TO CONFIGURE SONAR CLOUD? 👇🏼"
+
 
     - name: Check sonar-token, sonar_organization, sonar_projectbasedir & sonar_projectkey
       if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
       shell: bash
       run: |
+        echo "Checking if SONAR-TOKEN, SONAR-ORGANIZATION, SONAR-PROJECTKEY and SONAR-PROJECTBASEDIR are set..."
         if [ -z "${{ inputs.sonar-token }}" ]; then
           echo "❌ Error: SONAR-TOKEN is not set. To set it, go to your repository settings > Secrets > New repository secret and add it as 'SONAR-TOKEN'."
           echo "❌ Error: SONAR-TOKEN is not set. To set it, go to your repository settings > Secrets > New repository secret and add it as 'SONAR-TOKEN'." >> $GITHUB_STEP_SUMMARY
@@ -78,4 +80,4 @@ runs:
         args: >
           -Dsonar.organization=${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}
           -Dsonar.projectKey=${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}
-          ${{ fromJson(inputs.config-json).SONAR_EXTRA_ARGS }}
+          -Dsonar.verbose=true
