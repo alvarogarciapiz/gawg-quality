@@ -24,16 +24,19 @@ runs:
   steps:
     - name: Skip SonarCloud Scan
       if: ${{ fromJson(inputs.config-json).SONAR == 'disabled' }}
+      shell: bash
       run: |
         echo "SonarCloud Scan is disabled. To enable it, set the SONAR variable to 'enabled' in the workflow_config.yml file."
         echo "SonarCloud Scan is disabled. To enable it, set the SONAR variable to 'enabled' in the workflow_config.yml file." >> $GITHUB_STEP_SUMMARY
 
     - name: Sonar Analysis configuration INFO
+      shell: bash
       run: |
         echo "test"
 
     - name: Check sonar-token, sonar_organization, sonar_projectbasedir & sonar_projectkey
       if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
+      shell: bash
       run: |
         if [ -z "${{ inputs.sonar-token }}" ]; then
           echo "❌ Error: SONAR-TOKEN is not set. To set it, go to your repository settings > Secrets > New repository secret and add it as 'SONAR-TOKEN'."
