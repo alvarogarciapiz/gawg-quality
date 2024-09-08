@@ -73,8 +73,8 @@ runs:
       if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
       uses: sonarsource/sonarcloud-github-action@master
       env:
-        SONAR_TOKEN: ${{ inputs.github-token }}
-        GITHUB_TOKEN: ${{ inputs.sonar-token }}
+        SONAR_TOKEN: ${{ inputs.sonar-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       with:
         projectBaseDir: ${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}
         args: >
