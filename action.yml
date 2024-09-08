@@ -33,13 +33,27 @@ runs:
       shell: bash
       run: |
         echo "⚠️ HOW TO CONFIGURE SONAR CLOUD? 👇🏼"
+        echo "The following configuration is required to enable SonarCloud analysis:"
+        echo "1. Go to https://sonarcloud.io/ and create an account."
+        echo "2. Create a new project and generate a token."
+        echo "To generate a token, go to your SonarCloud account > Security > Generate token."
+        echo "3. Go to your repository settings > Secrets > New repository secret and add the token as 'SONAR_TOKEN'."
+        echo "4. Create a sonar-project.properties file in the root of your project with the following content:"
+        echo "* sonar.organization"
+        echo "* sonar.projectKey"
+        echo "* sonar.sources"
+        echo "* sonar.sourceEncoding"
+        echo "Your sonar organization and projectkey can be found in your SonarCloud account in the project settings."
+        echo "Note: make sure to disable automatic analysis in SonarCloud."
+        echo "Note: You can customize the analysis by adding more properties to the sonar-project.properties file."
+        echo "Further information can be found in: https://docs.sonarsource.com/sonarcloud/?_gl=1*9c6cks*_gcl_au*MjE0MDA2MjkyOS4xNzI1Nzg1MjM4*_ga*NjQxNjQ4MDYuMTcyNTc4NTIzNg..*_ga_9JZ0GZ5TC6*MTcyNTc4NTIzNi4xLjEuMTcyNTc4OTYyMS42MC4wLjA"
 
 
-    - name: Check sonar-token, sonar_organization, sonar_projectbasedir & sonar_projectkey
+    - name: Check sonar-token
       if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
       shell: bash
       run: |
-        echo "Checking if SONAR-TOKEN, SONAR-ORGANIZATION, SONAR-PROJECTKEY and SONAR-PROJECTBASEDIR are set..."
+        echo "Checking if SONAR_TOKEN is set..."
         if [ -z "${{ inputs.sonar-token }}" ]; then
           echo "❌ Error: SONAR-TOKEN is not set. To set it, go to your repository settings > Secrets > New repository secret and add it as 'SONAR-TOKEN'."
           echo "❌ Error: SONAR-TOKEN is not set. To set it, go to your repository settings > Secrets > New repository secret and add it as 'SONAR-TOKEN'." >> $GITHUB_STEP_SUMMARY
@@ -47,27 +61,6 @@ runs:
         else
           echo "✅ SONAR-TOKEN is set."
         fi
-        # if [ -z "${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}" ]; then
-        #   echo "❌ Error: SONAR-ORGANIZATION is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_ORGANIZATION'."
-        #   echo "❌ Error: SONAR-ORGANIZATION is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_ORGANIZATION'." >> $GITHUB_STEP_SUMMARY
-        #   exit 1
-        # else 
-        #   echo "✅ SONAR-ORGANIZATION is set."
-        # fi
-        # if [ -z "${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}" ]; then
-        #   echo "❌ Error: SONAR-PROJECTKEY is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTKEY'."
-        #   echo "❌ Error: SONAR-PROJECTKEY is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTKEY'." >> $GITHUB_STEP_SUMMARY
-        #   exit 1
-        # else
-        #   echo "✅ SONAR-PROJECTKEY is set."
-        # fi
-        # if [ -z "${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}" ]; then
-        #   echo "❌ Error: SONAR-PROJECTBASEDIR is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTBASEDIR'."
-        #   echo "❌ Error: SONAR-PROJECTBASEDIR is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTBASEDIR'." >> $GITHUB_STEP_SUMMARY
-        #   exit 1
-        # else
-        #   echo "✅ SONAR-PROJECTBASEDIR is set."
-        # fi
 
     - name: SonarCloud Scan
       if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
@@ -75,9 +68,3 @@ runs:
       env:
         SONAR_TOKEN: ${{ inputs.sonar-token }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
-      # with:
-      #   projectBaseDir: ${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}
-      #   args: >
-      #     -Dsonar.organization=${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}
-      #     -Dsonar.projectKey=${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}
-      #     -Dsonar.verbose=true
