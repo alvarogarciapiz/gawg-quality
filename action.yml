@@ -47,27 +47,27 @@ runs:
         else
           echo "✅ SONAR-TOKEN is set."
         fi
-        if [ -z "${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}" ]; then
-          echo "❌ Error: SONAR-ORGANIZATION is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_ORGANIZATION'."
-          echo "❌ Error: SONAR-ORGANIZATION is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_ORGANIZATION'." >> $GITHUB_STEP_SUMMARY
-          exit 1
-        else 
-          echo "✅ SONAR-ORGANIZATION is set."
-        fi
-        if [ -z "${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}" ]; then
-          echo "❌ Error: SONAR-PROJECTKEY is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTKEY'."
-          echo "❌ Error: SONAR-PROJECTKEY is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTKEY'." >> $GITHUB_STEP_SUMMARY
-          exit 1
-        else
-          echo "✅ SONAR-PROJECTKEY is set."
-        fi
-        if [ -z "${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}" ]; then
-          echo "❌ Error: SONAR-PROJECTBASEDIR is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTBASEDIR'."
-          echo "❌ Error: SONAR-PROJECTBASEDIR is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTBASEDIR'." >> $GITHUB_STEP_SUMMARY
-          exit 1
-        else
-          echo "✅ SONAR-PROJECTBASEDIR is set."
-        fi
+        # if [ -z "${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}" ]; then
+        #   echo "❌ Error: SONAR-ORGANIZATION is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_ORGANIZATION'."
+        #   echo "❌ Error: SONAR-ORGANIZATION is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_ORGANIZATION'." >> $GITHUB_STEP_SUMMARY
+        #   exit 1
+        # else 
+        #   echo "✅ SONAR-ORGANIZATION is set."
+        # fi
+        # if [ -z "${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}" ]; then
+        #   echo "❌ Error: SONAR-PROJECTKEY is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTKEY'."
+        #   echo "❌ Error: SONAR-PROJECTKEY is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTKEY'." >> $GITHUB_STEP_SUMMARY
+        #   exit 1
+        # else
+        #   echo "✅ SONAR-PROJECTKEY is set."
+        # fi
+        # if [ -z "${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}" ]; then
+        #   echo "❌ Error: SONAR-PROJECTBASEDIR is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTBASEDIR'."
+        #   echo "❌ Error: SONAR-PROJECTBASEDIR is not set. To set it, go to your workflow_config.yml file and add it as 'SONAR_PROJECTBASEDIR'." >> $GITHUB_STEP_SUMMARY
+        #   exit 1
+        # else
+        #   echo "✅ SONAR-PROJECTBASEDIR is set."
+        # fi
 
     - name: SonarCloud Scan
       if: ${{ fromJson(inputs.config-json).SONAR == 'enabled' }}
@@ -75,9 +75,9 @@ runs:
       env:
         SONAR_TOKEN: ${{ inputs.sonar-token }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
-      with:
-        projectBaseDir: ${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}
-        args: >
-          -Dsonar.organization=${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}
-          -Dsonar.projectKey=${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}
-          -Dsonar.verbose=true
+      # with:
+      #   projectBaseDir: ${{ fromJson(inputs.config-json).SONAR_PROJECTBASEDIR }}
+      #   args: >
+      #     -Dsonar.organization=${{ fromJson(inputs.config-json).SONAR_ORGANIZATION }}
+      #     -Dsonar.projectKey=${{ fromJson(inputs.config-json).SONAR_PROJECTKEY }}
+      #     -Dsonar.verbose=true
